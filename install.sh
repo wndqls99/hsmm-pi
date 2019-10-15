@@ -7,7 +7,10 @@
 #   Raspbian Stretch Lite with the dependencies and HSMM-Pi components.
 #
 
+# 쉘 스크립트가 실행될 때 모든 라인의 실행 결과를 검사해서 실패할 경우는 바로 스크립트 실행을 종료한다.
+# http://blog.woosum.net/archives/1032
 set -e
+
 
 if [ "$(id -u)" = "0" ]
   then echo "Please do not run as root, HTTP interface will not work"
@@ -22,20 +25,21 @@ cd ${HOME}
 sudo apt-get update
 
 # Install Web Server deps
-sudo apt-get install -y \
-    apache2 \
-    php \
-    sqlite \
-    php-mcrypt \
-    php-sqlite3 \
-    dnsmasq \
-    sysv-rc-conf \
-    make \
-    bison \
-    flex \
-    gpsd \
-    libnet-gpsd3-perl \
-    ntp
+# https://packages.ubuntu.com/ 참조
+sudo apt-get install -y \ # -y는 모든 질문을 표시하지 않고 예라고 대답하기
+    apache2 \ # Http 웹 서버
+    php \ # 웹 서버 프로그래밍 언어
+    sqlite \ # 응용 프로그램 내장 가능한 오픈소스 데이터베이스
+    php-mcrypt \ # 양방향 암호화 mcrypt_encrypt함수 모듈
+    php-sqlite3 \ # SQLite3 module for PHP
+    dnsmasq \ # dnsmasq는 1000 클라이언트 이하의 로컬 네트워크에서 활용하 수 있는 간단한 DHCP/DNS 서버입니다. 핵심 특징으로는 쉬운 설정과 소규모 시스템을 꼽을 수 있습니다. IPv6를 지원하기도 합니다.
+    sysv-rc-conf \ # 터미널 런레벨 편집기로 시스템 시작시 네트워크 서비스 자동시작관리가 가능함
+    make \ # 개발시 각 부분(모듈&파일)에서 서로 함수로 엮여있을때 한 부분만 수정되도 알아서 연동되고 컴파일 되게 해주는 유틸리티 / make는 파일간 의존도를 파악&조사한다 / http://blog.jinbo.net/ubuntu/34
+    bison \ #  yacc의 기능을 개선한 GNU 파서를 생성해주는 파서 생성기이다. LALR 방식으로 작성된 문법을 처리하고 해석해서 C 코드로 만들어 준다.
+    flex \ # lex의 기능을 개선한 어휘분석기를 생성해주는 소프트웨어이다. flex를 이용하면 c로 구문 분석 코드를 만들 수 있다.
+    gpsd \ # gpsd는 GPS 수신기에서 데이터를 수신하고 Kismet 또는 GPS 네비게이션 소프트웨어와 같은 여러 애플리케이션에 데이터를 다시 제공하는 데몬입니다.
+    libnet-gpsd3-perl \ # Perl interface to the gpsd server daemon protocol version 3 (JSON)
+    ntp # Network Time Protocol daemon and utility programs / 지연이 있을 수 있는 네트워크 상에서, 컴퓨터와 컴퓨터간의 시간을 동기화 하기 위한 네트워크 프로토콜이다.
 
 # Remove ifplugd if present, as it interferes with olsrd
 sudo apt-get remove -y ifplugd
